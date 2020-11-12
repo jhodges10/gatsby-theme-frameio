@@ -1,19 +1,19 @@
 {
-  "name": "gatsby-theme-apollo-docs",
+  "name": "gatsby-theme-frameio-docs",
   "version": "4.5.9",
   "main": "index.js",
   "description": "A Gatsby theme for building documentation websites",
-  "author": "Trevor Blades <blades@apollographql.com>",
+  "author": "Jeff Hodges <jhodges@frame.io>",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/apollographql/gatsby-theme-apollo.git",
-    "directory": "packages/gatsby-theme-apollo-docs"
+    "url": "https://github.com/jhodges10/gatsby-theme-frameio.git",
+    "directory": "packages/gatsby-theme-frameio-docs"
   },
   "keywords": [
     "gatsby",
     "gatsby-plugin",
-    "apollo",
+    "frameio",
     "docs"
   ],
   "dependencies": {
