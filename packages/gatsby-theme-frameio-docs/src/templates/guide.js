@@ -1,17 +1,14 @@
 import CodeBlock from './code-block';
 import CustomSEO from './custom-seo';
 import Footer from './footer';
-import MDXRenderer from 'gatsby-plugin-mdx/mdx-renderer';
 import PageContent from './page-content';
 import PageHeader from './page-header';
 import CustomTable from './Template/index';
-import { HEADER_HEIGHT } from '../utils';
 import PropTypes from 'prop-types';
 import React, { Fragment, createContext, useContext } from 'react';
 import rehypeReact from 'rehype-react';
 import styled from '@emotion/styled';
 import { ContentWrapper, colors, smallCaps } from 'gatsby-theme-apollo-core';
-import { MDXProvider } from '@mdx-js/react';
 import { graphql, navigate } from 'gatsby';
 
 const StyledContentWrapper = styled(ContentWrapper)({
@@ -82,18 +79,17 @@ const renderAst = new rehypeReact({
 }).Compiler;
 
 export default function Template(props) {
+  // Get current browser location using Gatsby prop
   const { hash, pathname } = props.location;
-  const { file, site } = props.data;
-  const { frontmatter, headings, fields } =
-    file.childMarkdownRemark || file.childMdx;
+
+  // Grab Guide context
+  const { contentfulGuide, site } = props.data;
+  const { markdownContent } = contentfulGuide.body.childMarkdownRemark;
   const { title, description } = site.siteMetadata;
   const {
     sidebarContents,
     githubUrl,
-    spectrumUrl,
-    twitterHandle,
     baseUrl,
-    ffWidgetId
   } = props.pageContext;
 
   const pages = sidebarContents
@@ -103,44 +99,35 @@ export default function Template(props) {
   return (
     <Fragment>
       <CustomSEO
-        title={frontmatter.title}
-        description={frontmatter.description || description}
+        // Title comes from the Guide
+        title={contentfulGuide.title}
+        // Our description is an excerpt from markdown for now
+        description={markdownContent.excerpt || description}
         siteName={title}
         baseUrl={baseUrl}
-        image={fields.image}
-        twitterHandle={twitterHandle}
       />
       <StyledContentWrapper>
-        <PageHeader {...frontmatter} />
+        <PageHeader title={contentfulGuide.title} description={markdownContent.excerpt} />
         <hr />
         <PageContent
-          title={frontmatter.title}
-          apiReference={fields.apiReference}
+          title={contentfulGuide.title}
+          apiReference={false}
           pathname={pathname}
           pages={pages}
           headings={headings.filter(
             heading =>
-              heading.depth === 2 ||
-              heading.depth === (fields.apiReference ? 4 : 3)
+              heading.depth === 2
           )}
           hash={hash}
-          githubUrl={githubUrl}
-          spectrumUrl={spectrumUrl}
-          ffWidgetId={ffWidgetId}
         >
           <CustomLinkContext.Provider
             value={{
               pathPrefix: site.pathPrefix,
               baseUrl
             }}
-          >
-            {file.childMdx ? (
-              <MDXProvider components={components}>
-                <MDXRenderer>{file.childMdx.body}</MDXRenderer>
-              </MDXProvider>
-            ) : (
-                renderAst(file.childMarkdownRemark.htmlAst)
-              )}
+          >{
+              renderAst(markdownContent.htmlAst)
+            }
           </CustomLinkContext.Provider>
         </PageContent>
         <Footer />
@@ -164,36 +151,31 @@ export const pageQuery = graphql`
         description
       }
     }
-    file(id: {eq: $id}) {
-      childMarkdownRemark {
-        frontmatter {
-          title
-          description
+
+    contentfulGuide(id: {eq: $id}) {
+      body {
+        childMarkdownRemark {
+          rawMarkdownBody
+          excerpt(format: PLAIN, pruneLength: 100)
+          id
+          headings{
+            value
+          }
+          wordCount {
+            words
+          }
+          timeToRead
+          htmlAst
         }
-        headings {
-          value
-          depth
-        }
-        fields {
-          image
-          apiReference
-        }
-        htmlAst
       }
-      childMdx {
-        frontmatter {
-          title
-          description
-        }
-        headings {
-          value
-          depth
-        }
-        fields {
-          image
-          apiReference
-        }
-        body
+      author {
+        name
+      }
+      createdAt
+      updatedAt
+      title
+      section {
+        title
       }
     }
   }

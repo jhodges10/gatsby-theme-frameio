@@ -4,20 +4,16 @@ const {colors} = require('gatsby-theme-apollo-core/src/utils/colors');
 const {HEADER_HEIGHT} = require('./src/utils');
 
 module.exports = ({
-  root,
+  contentfulSpaceId,
+  contenfulAccessToken,
   siteName,
   pageTitle,
   description,
-  githubHost = 'github.com',
-  githubRepo,
-  baseDir = '',
-  contentDir = 'content',
-  versions = {},
   gaTrackingId,
-  ignore,
   checkLinksOptions,
   gatsbyRemarkPlugins = [],
-  remarkPlugins = []
+  // ignore,
+  // remarkPlugins = []
 }) => {
   const allGatsbyRemarkPlugins = [
     {
@@ -117,11 +113,11 @@ module.exports = ({
   const plugins = [
     'gatsby-theme-apollo-core',
     {
-      resolve: 'gatsby-source-filesystem',
+      resolve: 'gatsby-source-contentful',
       options: {
-        path: path.join(root, contentDir),
-        name: 'docs',
-        ignore
+        spaceId: contentfulSpaceId,
+        accessToken: contenfulAccessToken,
+        downloadLocal: true
       }
     },
     {
@@ -130,30 +126,16 @@ module.exports = ({
         plugins: allGatsbyRemarkPlugins
       }
     },
-    {
-      resolve: 'gatsby-plugin-mdx',
-      options: {
-        gatsbyRemarkPlugins: allGatsbyRemarkPlugins,
-        remarkPlugins: [
-          [remarkTypescript, {wrapperComponent: 'MultiCodeBlock'}],
-          ...remarkPlugins
-        ]
-      }
-    },
-    'gatsby-plugin-printer',
-    ...Object.entries(versions).map(([name, branch]) => ({
-      resolve: 'gatsby-source-git',
-      options: {
-        name,
-        branch,
-        remote: `https://${githubHost}/${githubRepo}`,
-        patterns: [
-          path.join(baseDir, contentDir, '**'),
-          path.join(baseDir, 'gatsby-config.js'),
-          path.join(baseDir, '_config.yml')
-        ]
-      }
-    }))
+    // {
+    //   resolve: 'gatsby-plugin-mdx',
+    //   options: {
+    //     gatsbyRemarkPlugins: allGatsbyRemarkPlugins,
+    //     remarkPlugins: [
+    //       [remarkTypescript, {wrapperComponent: 'MultiCodeBlock'}],
+    //       ...remarkPlugins
+    //     ]
+    //   }
+    // },
   ];
 
   if (gaTrackingId) {
