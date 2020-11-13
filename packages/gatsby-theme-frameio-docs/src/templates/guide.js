@@ -84,7 +84,7 @@ export default function Template(props) {
 
   // Grab Guide context
   const { contentfulGuide, site } = props.data;
-  const { markdownContent } = contentfulGuide.body.childMarkdownRemark;
+  const { markdown } = contentfulGuide.body;
   const { title, description } = site.siteMetadata;
   const {
     sidebarContents,
@@ -92,9 +92,15 @@ export default function Template(props) {
     baseUrl,
   } = props.pageContext;
 
-  const pages = sidebarContents
-    .reduce((acc, { pages }) => acc.concat(pages), [])
-    .filter(page => !page.anchor);
+  console.log("SidebarContents", sidebarContents);
+
+  // const pages = sidebarContents
+  //   .reduce((acc, { pages }) => acc.concat(pages), [])
+  //   .filter(page => !page.anchor);
+
+  const pages = sidebarContents.filter(Boolean);
+
+  console.log("Reduced 'pages", pages);
 
   return (
     <Fragment>
@@ -102,19 +108,20 @@ export default function Template(props) {
         // Title comes from the Guide
         title={contentfulGuide.title}
         // Our description is an excerpt from markdown for now
-        description={markdownContent.excerpt || description}
+        // description={markdownContent.excerpt || description}
+        description="Blank for now!"
         siteName={title}
         baseUrl={baseUrl}
       />
       <StyledContentWrapper>
-        <PageHeader title={contentfulGuide.title} description={markdownContent.excerpt} />
+        <PageHeader title={contentfulGuide.title} description="Blank for now" />
         <hr />
         <PageContent
           title={contentfulGuide.title}
           apiReference={false}
           pathname={pathname}
           pages={pages}
-          headings={headings.filter(
+          headings={markdown.headings.filter(
             heading =>
               heading.depth === 2
           )}
@@ -125,8 +132,9 @@ export default function Template(props) {
               pathPrefix: site.pathPrefix,
               baseUrl
             }}
-          >{
-              renderAst(markdownContent.htmlAst)
+          >
+            {
+              renderAst(markdown.htmlAst)
             }
           </CustomLinkContext.Provider>
         </PageContent>
@@ -154,12 +162,13 @@ export const pageQuery = graphql`
 
     contentfulGuide(id: {eq: $id}) {
       body {
-        childMarkdownRemark {
-          rawMarkdownBody
+        markdown: childMarkdownRemark {
           excerpt(format: PLAIN, pruneLength: 100)
           id
-          headings{
+          headings {
+            id
             value
+            depth
           }
           wordCount {
             words

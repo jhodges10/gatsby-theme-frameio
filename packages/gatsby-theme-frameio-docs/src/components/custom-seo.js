@@ -3,8 +3,7 @@ import React from 'react';
 import { SEO } from 'gatsby-theme-apollo-core';
 import { withPrefix } from 'gatsby';
 
-export default function CustomSEO({ image, baseUrl, twitterHandle, ...props }) {
-  const imagePath = withPrefix('/' + image);
+export default function CustomSEO({ baseUrl, ...props }) {
   return (
     <SEO {...props} ></SEO>
   );
@@ -12,6 +11,4 @@ export default function CustomSEO({ image, baseUrl, twitterHandle, ...props }) {
 
 CustomSEO.propTypes = {
   baseUrl: PropTypes.string,
-  image: PropTypes.string.isRequired,
-  twitterHandle: PropTypes.string
 };
