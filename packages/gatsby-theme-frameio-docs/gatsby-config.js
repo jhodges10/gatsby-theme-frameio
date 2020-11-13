@@ -1,7 +1,7 @@
 const path = require('path');
 const remarkTypescript = require('remark-typescript');
-const {colors} = require('gatsby-theme-apollo-core/src/utils/colors');
-const {HEADER_HEIGHT} = require('./src/utils');
+const { colors } = require('gatsby-theme-apollo-core/src/utils/colors');
+const { HEADER_HEIGHT } = require('./src/utils');
 
 module.exports = ({
   contentfulSpaceId,
@@ -120,6 +120,13 @@ module.exports = ({
         downloadLocal: true
       }
     },
+    // {
+    //   resolve: "gatsby-source-filesystem",
+    //   options: {
+    //     name: "src",
+    //     path: `${__dirname}/src`
+    //   }
+    // },
     {
       resolve: 'gatsby-transformer-remark',
       options: {

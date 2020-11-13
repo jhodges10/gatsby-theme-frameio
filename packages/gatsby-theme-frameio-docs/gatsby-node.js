@@ -61,6 +61,11 @@ exports.createPages = async (
           author {
             name
           }
+          section {
+            ... on ContentfulSection {
+              slug
+            }
+          }
           body {
             childMarkdownRemark {
               rawMarkdownBody
@@ -75,7 +80,7 @@ exports.createPages = async (
       }
     }
 
-    allContentfulSections {
+    allContentfulSection {
       edges {
         node {
           title

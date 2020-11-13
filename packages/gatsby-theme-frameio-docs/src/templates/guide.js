@@ -1,15 +1,15 @@
-import CodeBlock from './code-block';
-import CustomSEO from './custom-seo';
-import Footer from './footer';
-import PageContent from './page-content';
-import PageHeader from './page-header';
-import CustomTable from './Template/index';
 import PropTypes from 'prop-types';
 import React, { Fragment, createContext, useContext } from 'react';
 import rehypeReact from 'rehype-react';
 import styled from '@emotion/styled';
-import { ContentWrapper, colors, smallCaps } from 'gatsby-theme-apollo-core';
+import { ContentWrapper } from 'gatsby-theme-apollo-core';
 import { graphql, navigate } from 'gatsby';
+import CodeBlock from '../components/code-block';
+import CustomSEO from '../components/custom-seo';
+import Footer from '../components/footer';
+import PageContent from '../components/page-content';
+import PageHeader from '../components/page-header';
+import CustomTable from '../components/Template/index';
 
 const StyledContentWrapper = styled(ContentWrapper)({
   paddingBottom: 0
