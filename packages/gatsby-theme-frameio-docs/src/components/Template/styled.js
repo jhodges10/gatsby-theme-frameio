@@ -1,4 +1,6 @@
-import styled from 'styled-components';
+import styled from '@emotion/styled';
+import { HEADER_HEIGHT } from '../../utils';
+import { colors, smallCaps } from 'gatsby-theme-apollo-core';
 
 export const TableWrapper = styled.div({
     overflow: 'auto',
