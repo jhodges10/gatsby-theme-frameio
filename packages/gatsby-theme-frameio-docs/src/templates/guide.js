@@ -92,14 +92,26 @@ export default function Template(props) {
     baseUrl,
   } = props.pageContext;
 
-  console.log("SidebarContents", sidebarContents);
-
+  
+  // We ultimately shouldn't need this because I'm going to prepare the data better
+  
   // const pages = sidebarContents
   //   .reduce((acc, { pages }) => acc.concat(pages), [])
   //   .filter(page => !page.anchor);
+  
+  const pages = sidebarContents;
 
-  const pages = sidebarContents.filter(Boolean);
+  // Iterate over sidebarcontents
+  // When we find a section that actually has pages, we want to then pull them out
+  // We ultimately want the shape of this to be a list of pages, one after the other
 
+  // pages = sidebarContents.forEach(element => {
+  //   if (element.pages && element.pages.length > 0) {
+  //     return 
+  //   }
+  // });
+  
+  console.log("SidebarContents", sidebarContents);
   console.log("Reduced 'pages", pages);
 
   return (
